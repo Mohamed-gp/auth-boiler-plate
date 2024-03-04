@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import joi from "joi"
+import { UserSignIn, UserSignUp } from "../types/interfaces";
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -29,7 +30,7 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 
-const singInValidator = (obj) => {
+const signInValidator = (obj:UserSignIn) => {
     const Schema = joi.object({
         email : joi.string().trim().min(5).max(20),
         password : joi.string().trim().min(5).max(20),
@@ -38,7 +39,7 @@ const singInValidator = (obj) => {
 }
 
 
-const signUpValidator = (obj) => {
+const signUpValidator = (obj:UserSignUp) => {
     const Schema = joi.object({
         username : joi.string().trim().min(5).max(20),
         email : joi.string().trim().min(5).max(20),
@@ -48,4 +49,4 @@ const signUpValidator = (obj) => {
 }
 
 
-export {User,singInValidator,singUpValidator}
+export {User,signUpValidator,signInValidator}

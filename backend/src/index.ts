@@ -1,25 +1,25 @@
 import express, { Request, Response } from "express";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 import { connectToDB } from "./lib/connectToDB";
-import cors from "cors"
+import cors from "cors";
+import { authRouter } from "./routes/auth/authRouter";
 
-dotenv.config()
+dotenv.config();
 
-
-
-
-connectToDB()
+connectToDB();
 const app = express();
-
+app.use(express.json())
 // import cors from "cors"
-app.use(cors())
+app.use(cors());
 
 
 
+// router 
 
+
+app.use("/auth",authRouter)
 
 const PORT = 8080;
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });
-

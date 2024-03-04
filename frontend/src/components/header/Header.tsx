@@ -3,7 +3,7 @@ import HeaderRight from "./HeaderRight";
 
 const Header = () => {
   return (
-    <header className="bg-blue-950/70 text-white font-bold">
+    <header className="font-bold text-white bg-mainColor">
       <div className="container flex justify-between py-4 ">
         <HeaderLeft />
         <HeaderRight />

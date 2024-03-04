@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 * {
-  font-family: "Roboto",sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 .roboto-thin {
   font-family: "Roboto", sans-serif;
@@ -75,4 +75,8 @@
   font-family: "Roboto", sans-serif;
   font-weight: 900;
   font-style: italic;
+}
+
+body {
+  background-color: #ffd17e;
 }
