@@ -1,15 +1,41 @@
+import axios from "axios";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { authActions } from "../../redux/slices/userSlice";
+import { toDoSliceActions } from "../../redux/slices/toDoSlice";
 
 const SignIn = () => {
+  const dispatch = useDispatch();
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
+  const submitHandler = async (e: Event) => {
+    e.preventDefault();
+    const dataToSubmit = {
+      email,
+      password,
+    };
+    try {
+      const { data } = await axios.post(
+        "http://localhost:8080/auth/signin",
+        dataToSubmit
+      );
+      console.log(data);
+      if (data.data) {
+        dispatch(authActions.saveUser(data.data));
+        dispatch(toDoSliceActions.initToDo(data.data.todos));
+      }
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
+  };
   return (
     <div
       className="container flex flex-col items-center justify-center gap-10"
       style={{ height: "calc(100vh - 55.98px)" }}
     >
       <form
+        onSubmit={submitHandler}
         action=""
         className="flex flex-col gap-2 w-[400px] text-white rounded-xl p-8 bg-mainColor items-center"
       >

@@ -19,7 +19,7 @@ const userSchema = new mongoose_1.default.Schema({
         required: true,
         trim: true,
         minlength: 5,
-        maxlength: 20,
+        maxlength: 50,
     },
     password: {
         type: String,
@@ -27,25 +27,29 @@ const userSchema = new mongoose_1.default.Schema({
         trim: true,
         minlength: 8,
     },
-    todos: {
-        type: Array,
-    }
+    // todos : [{ title: String, description: String }],
+}, { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } });
+userSchema.virtual("todos", {
+    // new propertie : posts : []
+    ref: "Todo", // reference to Post model
+    foreignField: "user", // the foreign field in the todos model that point to the user
+    localField: "_id", // get all post that have user == _id (in other way the where todos model point )
 });
 const User = mongoose_1.default.models.User || mongoose_1.default.model("User", userSchema);
 exports.User = User;
 const signInValidator = (obj) => {
     const Schema = joi_1.default.object({
-        email: joi_1.default.string().trim().min(5).max(20),
-        password: joi_1.default.string().trim().min(5).max(20),
+        email: joi_1.default.string().trim().min(5).max(50).required(),
+        password: joi_1.default.string().trim().min(8).required(),
     });
     return Schema.validate(obj);
 };
 exports.signInValidator = signInValidator;
 const signUpValidator = (obj) => {
     const Schema = joi_1.default.object({
-        username: joi_1.default.string().trim().min(5).max(20),
-        email: joi_1.default.string().trim().min(5).max(20),
-        password: joi_1.default.string().trim().min(5).max(20),
+        username: joi_1.default.string().trim().min(5).max(20).required(),
+        email: joi_1.default.string().trim().min(5).max(50).required(),
+        password: joi_1.default.string().trim().min(8).required(),
     });
     return Schema.validate(obj);
 };

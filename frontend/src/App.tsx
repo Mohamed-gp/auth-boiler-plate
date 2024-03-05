@@ -3,6 +3,7 @@ import Home from "./pages/home/Home";
 import Header from "./components/header/Header";
 import SignIn from "./components/auth/SignIn";
 import SignUp from "./components/auth/SignUp";
+import UserToDos from "./pages/userToDos/UserToDos";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route element={<Home />} path="/" />
         <Route element={<SignIn />} path="/signin" />
         <Route element={<SignUp />} path="/signup" />
+        <Route element={<UserToDos />} path="/todos/:id" />
       </Routes>
     </BrowserRouter>
   );

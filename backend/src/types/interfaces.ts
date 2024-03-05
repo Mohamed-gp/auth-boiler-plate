@@ -8,5 +8,11 @@ interface UserSignUp {
     password : string
 }
 
+interface toDo {
+    title : string,
+    description : string,
+    user : string
+}
 
-export {UserSignIn,UserSignUp}
+
+export {UserSignIn,UserSignUp,toDo}

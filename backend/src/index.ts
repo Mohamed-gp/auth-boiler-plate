@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { connectToDB } from "./lib/connectToDB";
 import cors from "cors";
 import { authRouter } from "./routes/auth/authRouter";
+import { toDosRouter } from "./routes/todos/toDosRouter";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(cors());
 
 
 app.use("/auth",authRouter)
+app.use("/todos",toDosRouter)
 
 const PORT = 8080;
 app.listen(PORT, () => {

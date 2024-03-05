@@ -1,6 +1,7 @@
 import { useState } from "react";
-import axios from "axios"
+import axios from "axios";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const [username, setusername] = useState("");
@@ -8,23 +9,35 @@ const SignUp = () => {
   const [password, setpassword] = useState("");
 
   const submitHandler = async (e: Event) => {
-    e.preventDefault()
-    const dataToSubmit = {email,password,username}
-    try {
-      const {data} = await axios.post("http://localhost:8080/signup",dataToSubmit)
-      console.log(data)
-    } catch (error) {
-      console.log(error)
-      
+    e.preventDefault();
+    if (username.trim() == "") {
+      return toast.error("username musn't be empty");
     }
-  }
+    if (email.trim() == "") {
+      return toast.error("email musn't be empty");
+    }
+    if (password.trim() == "") {
+      return toast.error("password musn't be empty");
+    }
+    const dataToSubmit = { email, password, username };
+    try {
+      const { data } = await axios.post(
+        "http://localhost:8080/auth/signup",
+        dataToSubmit
+      );
+      console.log(data);
+    } catch (error) {
+      console.log(error.response.data.message);
+      return toast.error(error.response.data.message);
+    }
+  };
   return (
     <div
       className="container flex flex-col items-center justify-center gap-10"
       style={{ height: "calc(100vh - 55.98px)" }}
     >
       <form
-      onSubmit={submitHandler}
+        onSubmit={submitHandler}
         action=""
         className="flex flex-col gap-2 w-[400px] text-white rounded-xl p-8 bg-mainColor items-center"
       >
@@ -72,7 +85,7 @@ const SignUp = () => {
       </form>
       <div className="flex gap-2">
         <p>Already have an Account?</p>
-        <Link to="/signup">Sign-In</Link>
+        <Link to="/signin">Sign-In</Link>
       </div>
     </div>
   );
