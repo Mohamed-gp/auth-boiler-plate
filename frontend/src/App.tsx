@@ -11,8 +11,14 @@ function App() {
       <Header />
       <Routes>
         <Route element={<Home />} path="/" />
-        <Route element={<SignIn />} path="/signin" />
-        <Route element={<SignUp />} path="/signup" />
+        <Route
+          element={localStorage.getItem("user") ? <Home /> : <SignIn />}
+          path="/signin"
+        />
+        <Route
+          element={localStorage.getItem("user") ? <Home /> : <SignUp />}
+          path="/signup"
+        />
         <Route element={<UserToDos />} path="/todos/:id" />
       </Routes>
     </BrowserRouter>

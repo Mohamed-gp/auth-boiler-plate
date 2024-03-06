@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { authActions } from "../../redux/slices/userSlice";
 import { toDoSliceActions } from "../../redux/slices/toDoSlice";
 
@@ -9,6 +9,7 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
+  const navigate = useNavigate();
   const submitHandler = async (e: Event) => {
     e.preventDefault();
     const dataToSubmit = {
@@ -24,6 +25,7 @@ const SignIn = () => {
       if (data.data) {
         dispatch(authActions.saveUser(data.data));
         dispatch(toDoSliceActions.initToDo(data.data.todos));
+        navigate("/");
       }
     } catch (error) {
       console.log(error.response.data.message);

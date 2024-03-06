@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createToDo = exports.getAllToDosByID = void 0;
+exports.deleteToDo = exports.createToDo = exports.getAllToDosByID = void 0;
 const Todo_1 = require("../../models/Todo");
 const getAllToDosByID = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
@@ -32,3 +32,9 @@ const createToDo = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     return res.status(201).json({ message: "created succefuly", data: todo });
 });
 exports.createToDo = createToDo;
+const deleteToDo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    yield Todo_1.Todo.deleteOne({ _id: id });
+    return res.status(201).json({ message: "deleted succefuly succefuly" });
+});
+exports.deleteToDo = deleteToDo;

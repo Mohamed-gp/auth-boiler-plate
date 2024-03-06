@@ -26,4 +26,12 @@ const createToDo = async (req: Request, res: Response, next: NextFunction) => {
   return res.status(201).json({ message: "created succefuly", data: todo });
 };
 
-export { getAllToDosByID, createToDo };
+
+
+const deleteToDo = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+  await Todo.deleteOne({_id : id})
+  return res.status(201).json({ message: "deleted succefuly succefuly"});
+};
+
+export { getAllToDosByID, createToDo ,deleteToDo};

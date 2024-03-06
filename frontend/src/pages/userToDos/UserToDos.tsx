@@ -11,7 +11,6 @@ const UserToDos = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const todos = useSelector((state) => state.toDo.toDos);
-  console.log(todos);
   const [title, settitle] = useState("");
   const [description, setdescription] = useState("");
   const submitHandler = async (e: Event) => {
@@ -39,6 +38,19 @@ const UserToDos = () => {
       toast.error(error.response.message);
     }
   };
+  // remove todo by id
+  const removeHandler = async (e: Event, id) => {
+    e.preventDefault();
+    try {
+      console.log(id);
+      const { data } = await axios.delete(`http://localhost:8080/todos/${id}`);
+      dispatch(toDoSliceActions.removeTodo(id));
+      console.log(data);
+    } catch (error) {
+      console.log(error.response.message);
+      toast.error(error.response.message);
+    }
+  };
   return (
     <div className="container my-6">
       {todos?.map((element) => (
@@ -50,7 +62,10 @@ const UserToDos = () => {
               {new Date().getFullYear()}/{new Date().getMonth()}/
               {new Date().getDay()}
             </p>
-            <span className="absolute flex items-center justify-center w-6 h-6 text-white bg-red-600 rounded-full cursor-pointer -top-3 -right-3">
+            <span
+              onClick={(e) => removeHandler(e, element.id)}
+              className="absolute flex items-center justify-center w-6 h-6 text-white bg-red-600 rounded-full cursor-pointer -top-3 -right-3"
+            >
               <FaXmark />
             </span>
           </div>

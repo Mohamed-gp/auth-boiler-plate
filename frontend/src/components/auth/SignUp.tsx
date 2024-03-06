@@ -2,6 +2,9 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { authActions } from "../../redux/slices/userSlice";
+import { toDoSliceActions } from "../../redux/slices/toDoSlice";
+import { useDispatch } from "react-redux";
 
 const SignUp = () => {
   const [username, setusername] = useState("");
@@ -10,6 +13,7 @@ const SignUp = () => {
 
   const submitHandler = async (e: Event) => {
     e.preventDefault();
+    const dispatch = useDispatch()
     if (username.trim() == "") {
       return toast.error("username musn't be empty");
     }
@@ -26,6 +30,10 @@ const SignUp = () => {
         dataToSubmit
       );
       console.log(data);
+      if (data.data) {
+        dispatch(authActions.saveUser(data.data));
+        dispatch(toDoSliceActions.initToDo(data.data.todos));
+      }
     } catch (error) {
       console.log(error.response.data.message);
       return toast.error(error.response.data.message);

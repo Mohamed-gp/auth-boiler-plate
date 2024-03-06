@@ -7,3 +7,4 @@ const toDosRouter = (0, express_1.Router)();
 exports.toDosRouter = toDosRouter;
 toDosRouter.route("/:id").get(toDosControllers_1.getAllToDosByID);
 toDosRouter.route("/:id").post(toDosControllers_1.createToDo);
+toDosRouter.route("/:id").delete(toDosControllers_1.deleteToDo);
