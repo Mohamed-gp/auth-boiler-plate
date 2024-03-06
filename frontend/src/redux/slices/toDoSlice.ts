@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const toDoSlice = createSlice({
   name: "toDoSlice",
   initialState: {
-    toDos: [],
+    toDos: [] as any[],
   },
   reducers: {
     initToDo(state, action) {
@@ -13,7 +13,7 @@ const toDoSlice = createSlice({
       state.toDos.push(action.payload);
     },
     removeTodo(state, action) {
-      state.toDos.filter((ele) => ele.id != action.payload);
+      state.toDos = state.toDos.filter((ele) => ele.id != action.payload);
     },
   },
 });
