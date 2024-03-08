@@ -28,7 +28,7 @@ const UserToDos = () => {
     };
     try {
       const { data } = await axios.post(
-        `http://localhost:8080/todos/${id}`,
+        `http://localhost:8080/api/todos/${id}`,
         dataToSubmit
       );
       dispatch(toDoSliceActions.addToDo(data.data));
@@ -43,7 +43,9 @@ const UserToDos = () => {
     e.preventDefault();
     try {
       console.log(id);
-      const { data } = await axios.delete(`http://localhost:8080/todos/${id}`);
+      const { data } = await axios.delete(
+        `http://localhost:8080/api/todos/${id}`
+      );
       dispatch(toDoSliceActions.removeTodo(id));
       console.log(data);
     } catch (error) {

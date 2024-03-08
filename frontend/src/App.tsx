@@ -4,22 +4,24 @@ import Header from "./components/header/Header";
 import SignIn from "./components/auth/SignIn";
 import SignUp from "./components/auth/SignUp";
 import UserToDos from "./pages/userToDos/UserToDos";
+import { useSelector } from "react-redux";
 
 function App() {
+  const user = useSelector(state => state.auth.user)
   return (
     <BrowserRouter>
       <Header />
       <Routes>
         <Route element={<Home />} path="/" />
         <Route
-          element={localStorage.getItem("user") ? <Home /> : <SignIn />}
+          element={user ? <Home /> : <SignIn />}
           path="/signin"
         />
         <Route
-          element={localStorage.getItem("user") ? <Home /> : <SignUp />}
+          element={user ? <Home /> : <SignUp />}
           path="/signup"
         />
-        <Route element={<UserToDos />} path="/todos/:id" />
+        <Route element={user ? <UserToDos /> : <Home/>} path="/todos/:id" />
       </Routes>
     </BrowserRouter>
   );

@@ -21,7 +21,6 @@ const SignIn = () => {
         "http://localhost:8080/auth/signin",
         dataToSubmit
       );
-      console.log(data);
       if (data.data) {
         dispatch(authActions.saveUser(data.data));
         dispatch(toDoSliceActions.initToDo(data.data.todos));

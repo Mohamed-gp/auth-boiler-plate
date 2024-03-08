@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, response } from "express";
-import { User, signInValidator, signUpValidator } from "../../models/User";
+import { User, signInValidator, signUpValidator } from "../models/User";
 import bcrypt from "bcrypt";
-import { Todo } from "../../models/Todo";
+import { Todo } from "../models/Todo";
 
 /**
  * @desc signin old User
@@ -42,6 +42,7 @@ const signInContoller = async (req: Request, res: Response) => {
   }
 };
 
+// we can wrap it in async handler express function and we will not use try catch
 /**
  * @desc create a new user
  * @route /auth/signup

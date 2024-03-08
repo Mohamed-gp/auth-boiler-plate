@@ -1,17 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import { Todo, toDoValidator } from "../../models/Todo";
+import { Todo, toDoValidator } from "../models/Todo";
 
-const getAllToDosByID = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { id } = req.params;
-  return res.status(200).json({
-    message: id,
-  });
-};
-
+/**
+ * @desc create todo
+ * @route /api/todos/:id
+ * @access public
+ * @method POST
+ */
 const createToDo = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const { error } = toDoValidator({ ...req.body, user: id });
@@ -26,12 +21,16 @@ const createToDo = async (req: Request, res: Response, next: NextFunction) => {
   return res.status(201).json({ message: "created succefuly", data: todo });
 };
 
-
-
+/**
+ * @desc create todo
+ * @route /api/todos/:id
+ * @access public
+ * @method DELETE
+ */
 const deleteToDo = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
-  await Todo.deleteOne({_id : id})
-  return res.status(201).json({ message: "deleted succefuly succefuly"});
+  await Todo.deleteOne({ _id: id });
+  return res.status(201).json({ message: "deleted succefuly succefuly" });
 };
 
-export { getAllToDosByID, createToDo ,deleteToDo};
+export { createToDo, deleteToDo };
