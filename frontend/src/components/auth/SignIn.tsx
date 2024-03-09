@@ -23,7 +23,7 @@ const SignIn = () => {
     };
     try {
       const { data } = await request.post(
-        "http://localhost:8080/auth/signin",
+        "/auth/signin",
         dataToSubmit
       );
       dispatch(authActions.setCredential(data.data));

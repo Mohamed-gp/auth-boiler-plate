@@ -31,10 +31,7 @@ const SignUp = () => {
     }
     const dataToSubmit = { email, password, username };
     try {
-      const { data } = await request.post(
-        "http://localhost:8080/auth/signup",
-        dataToSubmit
-      );
+      const { data } = await request.post("/auth/signup", dataToSubmit);
       dispatch(authActions.setCredential(data.data));
       dispatch(toDoSliceActions.initToDo(data.data.todos));
       toast.success(data.message);

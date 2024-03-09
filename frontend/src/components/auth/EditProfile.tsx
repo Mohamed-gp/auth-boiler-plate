@@ -30,7 +30,7 @@ const EditProfile = () => {
     if (Object.values(dataToSubmit).length > 0) {
       try {
         const { data } = await request.put(
-          "http://localhost:8080/auth/profile",
+          "/auth/profile",
           dataToSubmit
         );
         dispatch(authActions.setCredential(data.data));

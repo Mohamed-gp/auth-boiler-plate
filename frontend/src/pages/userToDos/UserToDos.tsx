@@ -29,7 +29,7 @@ const UserToDos = () => {
     };
     try {
       const { data } = await request.post(
-        `http://localhost:8080/api/todos/${userId}`,
+        `/api/todos/${userId}`,
         dataToSubmit
       );
       dispatch(toDoSliceActions.addToDo(data.data));
@@ -43,7 +43,7 @@ const UserToDos = () => {
     e.preventDefault();
     try {
       const { data } = await request.delete(
-        `http://localhost:8080/api/todos/${id}`
+        `/api/todos/${id}`
       );
       dispatch(toDoSliceActions.removeTodo(id));
     } catch (error) {
