@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const toDoSlice = createSlice({
   name: "toDoSlice",
   initialState: {
-    toDos: [] as any[],
+    toDos: localStorage.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")).todos : null,
   },
   reducers: {
     initToDo(state, action) {

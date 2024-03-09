@@ -11,7 +11,7 @@ const createToDo = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const { error } = toDoValidator({ ...req.body, user: id });
   if (error) {
-    return res.status(200).json({ message: error.details[0].message });
+    return res.status(400).json({ message: error.details[0].message });
   }
   const todo = await Todo.create({
     title: req.body.title,

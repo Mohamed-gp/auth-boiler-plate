@@ -1,18 +1,19 @@
 "use client";
-import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { toDoSliceActions } from "../../redux/slices/toDoSlice";
+import { request } from "../../utils/request";
 
 const UserToDos = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { id: userId } = useParams();
   const todos = useSelector((state) => state.toDo.toDos);
   const [title, settitle] = useState("");
   const [description, setdescription] = useState("");
+
   const submitHandler = async (e: Event) => {
     e.preventDefault();
     if (title.trim() == "") {
@@ -24,33 +25,30 @@ const UserToDos = () => {
     const dataToSubmit = {
       title: title,
       description: description,
-      user: id,
+      user: userId,
     };
     try {
-      const { data } = await axios.post(
-        `http://localhost:8080/api/todos/${id}`,
+      const { data } = await request.post(
+        `http://localhost:8080/api/todos/${userId}`,
         dataToSubmit
       );
       dispatch(toDoSliceActions.addToDo(data.data));
-      console.log(data);
-    } catch (error) {
-      console.log(error.response.message);
-      toast.error(error.response.message);
+    } catch (error: any) {
+      console.log(error.response.data.message);
+      return toast.error(error.response.data.message);
     }
   };
   // remove todo by id
   const removeHandler = async (e: Event, id) => {
     e.preventDefault();
     try {
-      console.log(id);
-      const { data } = await axios.delete(
+      const { data } = await request.delete(
         `http://localhost:8080/api/todos/${id}`
       );
       dispatch(toDoSliceActions.removeTodo(id));
-      console.log(data);
     } catch (error) {
-      console.log(error.response.message);
-      toast.error(error.response.message);
+      console.log(error.response.data.message);
+      toast.error(error.response.data.message);
     }
   };
   return (

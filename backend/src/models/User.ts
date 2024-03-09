@@ -55,5 +55,13 @@ const signUpValidator = (obj: UserSignUp) => {
   });
   return Schema.validate(obj);
 };
+const updateUserValidator = (obj: UserSignUp) => {
+  const Schema = joi.object({
+    username: joi.string().trim().min(5).max(20),
+    email: joi.string().trim().min(5).max(50),
+    password: joi.string().trim().min(8),
+  });
+  return Schema.validate(obj);
+};
 
-export { User, signUpValidator, signInValidator };
+export { User, signUpValidator, signInValidator,updateUserValidator };

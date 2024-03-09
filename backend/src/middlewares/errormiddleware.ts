@@ -8,19 +8,19 @@ const notFound = (req: Request, res: Response, next: NextFunction) => {
 };
 
 // we can decalare err as any
-const errrorHandler: ErrorRequestHandler = (err, req, res, next) => {
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   // 200 because if we throw a manuel error the status is 200 but we dont want for the error to be 200 so we change it to 500
-  let statusCode = req.statusCode === 200 ? 500 : req.statusCode;
+  let statusCode = req.statusCode === 200 ? 500 : res.statusCode;
   let message = err.message;
   // mongosee have default thing in error so we handle it if for example the if doesn't exist
   if (err.name == "CastError" && err.kind === "ObjectId") {
     statusCode = 404;
     message = "Resource Not Found";
-  }
+  } 
   res.status(statusCode as number).json({
     message,
     stack: process.env.NODE_ENV === "production" ? null : err.stack, // error stack show us the place of error which line we don't show our file structure in production mode
   });
 };
 
-export { notFound, errrorHandler };
+export { notFound, errorHandler };

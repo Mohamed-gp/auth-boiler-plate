@@ -1,19 +1,25 @@
-import { useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { authActions } from "../../redux/slices/userSlice";
-import { toDoSliceActions } from "../../redux/slices/toDoSlice";
-import { useDispatch } from "react-redux";
+
+import { useDispatch, useSelector } from "react-redux";
+import { request } from "../../utils/request";
+import { authActions } from "../../redux/slices/authSlice";
 
 const SignUp = () => {
   const [username, setusername] = useState("");
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
-
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.auth.userInfo);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/");
+    }
+  }, [navigate, userInfo]);
   const submitHandler = async (e: Event) => {
     e.preventDefault();
-    const dispatch = useDispatch()
     if (username.trim() == "") {
       return toast.error("username musn't be empty");
     }
@@ -25,15 +31,14 @@ const SignUp = () => {
     }
     const dataToSubmit = { email, password, username };
     try {
-      const { data } = await axios.post(
+      const { data } = await request.post(
         "http://localhost:8080/auth/signup",
         dataToSubmit
       );
-      console.log(data);
-      if (data.data) {
-        dispatch(authActions.saveUser(data.data));
-        dispatch(toDoSliceActions.initToDo(data.data.todos));
-      }
+      dispatch(authActions.setCredential(data.data));
+      dispatch(toDoSliceActions.initToDo(data.data.todos));
+      toast.success(data.message);
+      navigate("/");
     } catch (error) {
       console.log(error.response.data.message);
       return toast.error(error.response.data.message);

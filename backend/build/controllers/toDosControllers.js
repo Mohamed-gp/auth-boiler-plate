@@ -21,7 +21,7 @@ const createToDo = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     const { id } = req.params;
     const { error } = (0, Todo_1.toDoValidator)(Object.assign(Object.assign({}, req.body), { user: id }));
     if (error) {
-        return res.status(200).json({ message: error.details[0].message });
+        return res.status(400).json({ message: error.details[0].message });
     }
     const todo = yield Todo_1.Todo.create({
         title: req.body.title,

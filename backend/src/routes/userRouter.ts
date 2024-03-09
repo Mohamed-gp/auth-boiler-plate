@@ -1,10 +1,9 @@
 import { Router } from "express";
-import { createToDo, deleteToDo} from "../controllers/toDosControllers";
+import { createToDo, deleteToDo } from "../controllers/toDosControllers";
+import { verifyTokenAndUser } from "../middlewares/authmiddleware";
 
-const router = Router()
+const router = Router();
 
+router.route("/:id").post(verifyTokenAndUser, createToDo).delete(deleteToDo);
 
-router.route("/:id").post(createToDo).delete(deleteToDo)
-
-
-export default router
+export default router;

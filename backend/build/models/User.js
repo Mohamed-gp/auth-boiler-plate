@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signInValidator = exports.signUpValidator = exports.User = void 0;
+exports.updateUserValidator = exports.signInValidator = exports.signUpValidator = exports.User = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const joi_1 = __importDefault(require("joi"));
 const userSchema = new mongoose_1.default.Schema({
@@ -55,3 +55,12 @@ const signUpValidator = (obj) => {
     return Schema.validate(obj);
 };
 exports.signUpValidator = signUpValidator;
+const updateUserValidator = (obj) => {
+    const Schema = joi_1.default.object({
+        username: joi_1.default.string().trim().min(5).max(20),
+        email: joi_1.default.string().trim().min(5).max(50),
+        password: joi_1.default.string().trim().min(8),
+    });
+    return Schema.validate(obj);
+};
+exports.updateUserValidator = updateUserValidator;

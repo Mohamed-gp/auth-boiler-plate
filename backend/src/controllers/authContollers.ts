@@ -1,7 +1,12 @@
-import { NextFunction, Request, Response, response } from "express";
-import { User, signInValidator, signUpValidator } from "../models/User";
+import { NextFunction, Request, Response } from "express";
+import {
+  User,
+  signInValidator,
+  signUpValidator,
+  updateUserValidator,
+} from "../models/User";
 import bcrypt from "bcrypt";
-import { Todo } from "../models/Todo";
+import { generateToken } from "../utils/generateToken";
 
 /**
  * @desc signin old User
@@ -31,10 +36,15 @@ const signInContoller = async (req: Request, res: Response) => {
     if (!isValid) {
       return res.status(400).json({ message: "Invalid email or password." });
     }
-
+    generateToken(res, user._id);
     return res.status(200).json({
-      message: "Signin successful",
-      data: user,
+      message: "Sign In successful",
+      data : {
+        id: user._id,
+        email: user.email,
+        username: user.username,
+        todos : user.todos
+      }
     });
   } catch (error) {
     console.error("Error in signInContoller:", error);
@@ -73,14 +83,93 @@ const signUpContoller = async (
     password: await bcrypt.hash(req.body.password, 10),
     username: req.body.username,
   });
+  generateToken(res, user._id);
   return res.status(201).json({
     message: "created succefuly",
-    data: {
-      _id: user._id,
+    data : {
+      id: user._id,
       email: user.email,
       username: user.username,
-    },
+      todos : user.todos
+    }
   });
 };
 
-export { signInContoller, signUpContoller };
+/**
+ * @desc logout user
+ * @route /auth/profile
+ * @access private with cookie token verifcation
+ * @method POST
+ */
+const editUserProfile = async (req: Request, res: Response) => {
+  const { error } = updateUserValidator(req.body);
+  if (error) {
+    return res.status(400).json({
+      message: error.details[0].message,
+    });
+  }
+  const user = await User.findById(req.user._id);
+  if (user) {
+    user.email = req.body.email || user.email;
+    user.username = req.body.username || user.username;
+    if (req.body.password) {
+      user.password = await bcrypt.hash(req.body.password,10);
+    }
+    const updatedUser = await user.save();
+
+    return res.status(200).json({
+      message: "succefuly user updated information",
+      data : {
+        id: user._id,
+        email: user.email,
+        username: user.username,
+
+      }
+    });
+  } else {
+    return res.status(404).json({ message: "user not Found" });
+  }
+};
+
+/**
+ * @desc logout user
+ * @route /auth/profile
+ * @access private with cookie token verifcation
+ * @method POST
+ */
+const getUserProfile = async (req: Request, res: Response) => {
+  const user = {
+    id: req.user._id
+    email: req.user.email,
+    username: req.user.username,
+    todos : user.todos
+
+  };
+  return res.status(200).json({
+    data: user,
+  });
+};
+
+/**
+ * @desc logout user
+ * @route /auth/logout
+ * @access public
+ * @method POST
+ */
+const logOut = async (req: Request, res: Response) => {
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+  return res.status(200).json({
+    message: "user logged out",
+  });
+};
+
+export {
+  signInContoller,
+  signUpContoller,
+  logOut,
+  getUserProfile,
+  editUserProfile,
+};

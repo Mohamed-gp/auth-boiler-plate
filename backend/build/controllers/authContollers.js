@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signUpContoller = exports.signInContoller = void 0;
+exports.editUserProfile = exports.getUserProfile = exports.logOut = exports.signUpContoller = exports.signInContoller = void 0;
 const User_1 = require("../models/User");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const generateToken_1 = require("../utils/generateToken");
 /**
  * @desc signin old User
  * @route /auth/signin
@@ -38,9 +39,15 @@ const signInContoller = (req, res) => __awaiter(void 0, void 0, void 0, function
         if (!isValid) {
             return res.status(400).json({ message: "Invalid email or password." });
         }
+        (0, generateToken_1.generateToken)(res, user._id);
         return res.status(200).json({
-            message: "Signin successful",
-            data: user,
+            message: "Sign In successful",
+            data: {
+                id: user._id,
+                email: user.email,
+                username: user.username,
+                todos: user.todos
+            }
         });
     }
     catch (error) {
@@ -76,13 +83,84 @@ const signUpContoller = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         password: yield bcrypt_1.default.hash(req.body.password, 10),
         username: req.body.username,
     });
+    (0, generateToken_1.generateToken)(res, user._id);
     return res.status(201).json({
         message: "created succefuly",
         data: {
-            _id: user._id,
+            id: user._id,
             email: user.email,
             username: user.username,
-        },
+            todos: user.todos
+        }
     });
 });
 exports.signUpContoller = signUpContoller;
+/**
+ * @desc logout user
+ * @route /auth/profile
+ * @access private with cookie token verifcation
+ * @method POST
+ */
+const editUserProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { error } = (0, User_1.updateUserValidator)(req.body);
+    if (error) {
+        return res.status(400).json({
+            message: error.details[0].message,
+        });
+    }
+    const user = yield User_1.User.findById(req.user._id);
+    if (user) {
+        user.email = req.body.email || user.email;
+        user.username = req.body.username || user.username;
+        if (req.body.password) {
+            user.password = yield bcrypt_1.default.hash(req.body.password, 10);
+        }
+        const updatedUser = yield user.save();
+        return res.status(200).json({
+            message: "succefuly user updated information",
+            data: {
+                id: user._id,
+                email: user.email,
+                username: user.username,
+            }
+        });
+    }
+    else {
+        return res.status(404).json({ message: "user not Found" });
+    }
+});
+exports.editUserProfile = editUserProfile;
+/**
+ * @desc logout user
+ * @route /auth/profile
+ * @access private with cookie token verifcation
+ * @method POST
+ */
+const getUserProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = {
+        id: req.user._id,
+        email: req.user.email,
+        username: req.user.username,
+        todos: user.todos
+    };
+    return res.status(200).json({
+        data: user,
+    });
+});
+exports.getUserProfile = getUserProfile;
+/**
+ * @desc logout user
+ * @route /auth/logout
+ * @access public
+ * @method POST
+ */
+const logOut = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.cookie("jwt", "", {
+        httpOnly: true,
+        expires: new Date(0),
+    });
+    return res.status(200).json({
+        message: "user logged out",
+    });
+});
+exports.logOut = logOut;
