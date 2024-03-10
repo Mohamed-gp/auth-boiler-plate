@@ -30,7 +30,7 @@ const UserToDos = () => {
     try {
       const { data } = await request.post(
         `/api/todos/${id}`,
-        dataToSubmit
+        dataToSubmit,{withCredentials : true}
       );
       dispatch(toDoSliceActions.addToDo(data.data));
     } catch (error: any) {
