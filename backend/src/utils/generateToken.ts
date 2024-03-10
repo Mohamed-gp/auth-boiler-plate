@@ -18,4 +18,5 @@ const generateToken = (res: Response, userId : string) => {
   });
 };
 
+
 export { generateToken };
