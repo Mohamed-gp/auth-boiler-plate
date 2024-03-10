@@ -10,7 +10,7 @@ const generateToken = (res: Response, userId : string) => {
   const token = jwt.sign({ userId }, process.env.jwtPASSWORD as string, {
     expiresIn: "30d",
   });
-  res.cookie("jwt", token, {
+  res.cookie("jwt", token,{
     secure: process.env.NODE_ENV == "production" ? true : false, // https in production
     httpOnly: true, // to prevent getting token with javascript in client side
     sameSite: "strict", // to prevent cfe attack

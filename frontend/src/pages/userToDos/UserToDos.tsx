@@ -9,7 +9,7 @@ import { request } from "../../utils/request";
 
 const UserToDos = () => {
   const dispatch = useDispatch();
-  const { id: userId } = useParams();
+  const { id } = useParams();
   const todos = useSelector((state) => state.toDo.toDos);
   const [title, settitle] = useState("");
   const [description, setdescription] = useState("");
@@ -25,11 +25,11 @@ const UserToDos = () => {
     const dataToSubmit = {
       title: title,
       description: description,
-      user: userId,
+      user: id,
     };
     try {
       const { data } = await request.post(
-        `/api/todos/${userId}`,
+        `/api/todos/${id}`,
         dataToSubmit
       );
       dispatch(toDoSliceActions.addToDo(data.data));
