@@ -4,6 +4,7 @@ import { User } from "../models/User";
 
 const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies.jwt;
+  return req.cookies
   if (token) {
     try {
       const decodedPayload = jwt.verify(
