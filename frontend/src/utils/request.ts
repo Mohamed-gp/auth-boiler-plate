@@ -9,5 +9,4 @@ const request = axios.create({
 export { request }
 
 
-https://auth-2-ht6v.onrender.com/
 
